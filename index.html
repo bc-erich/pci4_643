@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PCI Task Quiz</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .question {
+        margin-bottom: 15px;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        display: none;
+      }
+      .result ul {
+        list-style-type: none;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>PCI 4.0 Task Quiz</h1>
+    <div class="question">
+      <label for="initialQuestion"
+        >1. Do you have offer your shopper stored credit cards?</label
+      ><br />
+      <input type="radio" name="initialQuestion" value="storedyes" /> Yes<br />
+      <input type="radio" name="initialQuestion" value="storedno" /> No
+    </div>
+    <div class="question">
+      <label for="question1">2. What kind of checkout are you using</label
+      ><br />
+      <input type="radio" name="question1" value="task1" /> OOTB Checkout<br />
+      <input type="radio" name="question1" value="task2" /> Custom Checkout<br />
+      <input type="radio" name="question1" value="task3" /> Headless Checkout
+    </div>
+
+    <div class="question">
+      <label for="question2">3. What theme are you using?</label><br />
+      <input type="radio" name="question2" value="task4" /> Cornerstone, Peak,
+      Capacity, Fortune, Merchant<br />
+      <input type="radio" name="question2" value="task5" /> Marketplace Theme
+      <br />
+      <input type="radio" name="question2" value="task6" /> Customized Theme
+    </div>
+
+    <div class="question">
+      <label for="question3"
+        >4. Are you using inline scripts in Script Manager?</label
+      ><br />
+      <input type="radio" name="question3" value="task7" /> Yes<br />
+      <input type="radio" name="question3" value="task8" /> No
+    </div>
+
+    <div class="question">
+      <label for="question4"
+        >4. Are you using external scripts in Script Manager?</label
+      ><br />
+      <input type="radio" name="question4" value="task9" /> Yes<br />
+      <input type="radio" name="question4" value="task10" /> No
+    </div>
+
+    <button onclick="generateTasks()">Get My Tasks</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+      function generateTasks() {
+        const initialAnswer = document.querySelector(
+          'input[name="initialQuestion"]:checked'
+        );
+        const selectedAnswers = document.querySelectorAll(
+          'input[type="radio"]:checked'
+        );
+        const tasks = [];
+
+        // Determine time of day preference
+        const paymentPages = initialAnswer
+          ? initialAnswer.value === "storedyes"
+            ? "Stored Payment Method My Account pages and checkout"
+            : "checkout"
+          : "checkout";
+
+        // Always include these default tasks at the top of the list
+        const defaultTasks = [
+          "Enable the CSP nonce in your control panel settings",
+          "Obtain inventory for first party checkout scripts",
+          "Obtain inventory for payment integration scripts",
+          "Obtain inventory for first party data analytics scripts",
+        ];
+        tasks.push(...defaultTasks);
+
+        selectedAnswers.forEach((answer) => {
+          switch (answer.value) {
+            case "task1":
+              break;
+            case "task2":
+              tasks.push(
+                "Update to the latest Checkout JS.",
+                "Add SRI hash to custom checkout loader JS"
+              );
+              break;
+            case "task3":
+              tasks.push(
+                "You are entirely responsible for PCI 4.0 compliance."
+              );
+              break;
+            case "task4":
+              tasks.push(
+                "Update to the latest version of the theme.",
+                "Obtain inventory for theme scripts from BigCommerce"
+              );
+              break;
+            case "task5":
+              tasks.push(
+                "Confirm with theme partner that latest version of theme is compatible with nonce",
+                "Update to the latest version of the theme.",
+                "Obtain inventory for theme scripts from Theme Developer"
+              );
+              break;
+            case "task6":
+              tasks.push(
+                `Add integrity hash to any external scripts in the theme files on ${paymentPages}.`,
+                `Add the nonce to any scripts in the theme files on ${paymentPages}.`,
+                `Move any scripts in the theme files to Script Manager (Optional)`
+              );
+              break;
+            case "task7":
+              tasks.push(
+                `Create inventory for inline scripts in Script Manager that live on ${paymentPages}`,
+                `Determine process to monitor for any changes to inline scripts that live on ${paymentPages}`
+              );
+              break;
+            case "task8":
+              tasks.push();
+              break;
+            case "task9":
+              tasks.push(
+                `Create inventory for external scripts in Script Manager that live on ${paymentPages}`,
+                `Add SRI hashes to external scripts in Script Manager that live on ${paymentPages}`
+              );
+              break;
+          }
+        });
+
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `<h3>Your Tasks:</h3><ul>${tasks
+          .map((task) => `<li><input type='checkbox'> ${task}</li>`)
+          .join("")}</ul>`;
+        resultDiv.style.display = "block";
+      }
+    </script>
+  </body>
+</html>
